@@ -84,16 +84,41 @@ function moduleProject1() {
     count--
     if (count === 0) {
       countdown.textContent = "Liftoff! 🚀"
-      clearInterval(countdownInterval) // stops the countdown inverval
+      clearInterval(countdownInterval) // stops the countdown inverval from counting into the negatives
     } else { 
       countdown.textContent = `T-minus ${count}...`    }
   }, 1000)
-  // clearInterval(() =>{
-  //   count
-  // },1000)
   
   // 👉 TASK 5 - Build a "Friends" widget
   //  ✨ add your code here
+
+const personIdx =  people[Math.floor(Math.random()* people.length)] // this line will pull from data.js in the people array. The person selected will be at random by way of using the people array index. To pull according to index, we use [] and allow the index range to be dictated by math.logic to the length of the people array.
+const personText = document.createElement('p')
+const friendsWidget = document.querySelector('.friends')
+const yearOfBirth = personIdx.dateOfBirth.split('-')[0] // splits the DOB into an array Idx of 3 and selects the first item [0], the year
+const friendsArr = personIdx.friends // put the personIdx friends into a variable (for simplicity); allows for bracket/index notation
+
+const friendsText = (friendsArr) => { // put the friends array conditionals into a variable
+  if (friendsArr.length === 0) { // if the personIdx has no friends
+    return "has no friends"
+  } else {   
+    const friendsName = friendsArr.map(id => { // creates a variable to map over the friends array of peopleIdx
+      const friend = people.find(person => person.id === id); // If the friend id is found in personIdx friends array, returns names
+      return friend ? `${friend.fname} ${friend.lname}` : 'Unknown'; //turnary (if/else shorthand) if friend = truthy returns fname lname
+    });
+    
+    if (friendsName.length === 1) { // person has one friend
+      return `is friends with ${friendsName[0]}` // returns friends fname lname according to the id @ [index]
+    } else {
+      const friendsNotFinal = friendsName.slice(0,-1).join(', ') // adds comma between each index to friends list string except last one
+      const finalFriend = friendsName[friendsName.length - 1] // allows determining of the last friend: for later string grammar 
+      return `is friends with ${friendsNotFinal}, and ${finalFriend}`
+    }   
+  }
+}
+personText.textContent = `${personIdx.fname} ${personIdx.lname} was born in ${yearOfBirth} and ${friendsText(friendsArr)}.`
+friendsWidget.appendChild(personText)
+{/* <p>Michael Chen was born in 1995 and is friends with Carlos Garcia, Mohammed Ali and Jason Wong.</p> */}
 
 
   // 👉 TASK 6 - Make it so user can tab through the widgets
